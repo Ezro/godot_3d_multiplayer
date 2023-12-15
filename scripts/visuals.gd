@@ -17,8 +17,8 @@ func randomize_equips():
 func set_equips(equips):
     equipped[0] = equips[0]
     var hat = hats[equipped[0]]
-    Head.mesh = load(hat)
-    print(hat)
+    if hat != "":
+        Head.mesh = load(hat)
 
 func get_equips():
     return equipped
