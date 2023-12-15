@@ -1,0 +1,74 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8m404xlswlwc"]
+
+[ext_resource type="Script" path="res://scripts/multiplayer.gd" id="1_3dug3"]
+[ext_resource type="PackedScene" uid="uid://0is2wuj1vxed" path="res://scenes/player.tscn" id="2_n2f17"]
+
+[node name="Multiplayer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3dug3")
+PlayerScene = ExtResource("2_n2f17")
+
+[node name="Lobby" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 344.0
+offset_top = 48.0
+offset_right = 384.0
+offset_bottom = 88.0
+
+[node name="Buttons" type="Control" parent="Lobby"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Host" type="Button" parent="Lobby/Buttons"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 192.0
+offset_right = 192.0
+offset_bottom = 256.0
+text = "Host"
+
+[node name="Join" type="Button" parent="Lobby/Buttons"]
+offset_left = 256.0
+offset_top = 192.0
+offset_right = 384.0
+offset_bottom = 256.0
+text = "Join"
+
+[node name="Name" type="Control" parent="Lobby"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LineEdit" type="LineEdit" parent="Lobby/Name"]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 320.0
+offset_right = 384.0
+offset_bottom = 351.0
+
+[node name="Label" type="Label" parent="Lobby/Name"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 320.0
+offset_right = 123.0
+offset_bottom = 343.0
+text = "Name:"
+
+[node name="Players" type="Node" parent="."]
+
+[node name="Id" type="Label" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 56.0
+offset_bottom = 39.0
+text = "Id: "
+
+[connection signal="button_down" from="Lobby/Buttons/Host" to="." method="_on_host_button_down"]
+[connection signal="button_down" from="Lobby/Buttons/Join" to="." method="_on_join_button_down"]

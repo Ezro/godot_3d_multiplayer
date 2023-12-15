@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://0is2wuj1vxed"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_21qb1"]
+[ext_resource type="Script" path="res://scripts/player_input.gd" id="1_fmyig"]
+[ext_resource type="Script" path="res://scripts/visuals.gd" id="1_nsyce"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_hpaxc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dpo5x"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_k78lg"]
+properties/0/path = NodePath(".:sync_pos")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:equips")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rfggy"]
+properties/0/path = NodePath(".:input_motion")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_21qb1")
+
+[node name="Visuals" type="Node3D" parent="." node_paths=PackedStringArray("Head")]
+script = ExtResource("1_nsyce")
+Head = NodePath("Head")
+
+[node name="Body" type="MeshInstance3D" parent="Visuals"]
+mesh = SubResource("CapsuleMesh_hpaxc")
+
+[node name="Head" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.162, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_dpo5x")
+
+[node name="ServerSync" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_k78lg")
+
+[node name="PlayerInput" type="MultiplayerSynchronizer" parent="." node_paths=PackedStringArray("camera_3D")]
+root_path = NodePath(".")
+replication_config = SubResource("SceneReplicationConfig_rfggy")
+script = ExtResource("1_fmyig")
+camera_3D = NodePath("../Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.920505, 0.390731, 0, -0.390731, 0.920505, 0, 5, 8)

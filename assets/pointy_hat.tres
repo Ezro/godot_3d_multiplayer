@@ -1,0 +1,10 @@
+[gd_resource type="CylinderMesh" load_steps=2 format=3 uid="uid://gvblyaeoiu6s"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pmaup"]
+albedo_color = Color(1, 0.235294, 1, 1)
+
+[resource]
+material = SubResource("StandardMaterial3D_pmaup")
+top_radius = 0.0
+bottom_radius = 0.4
+height = 1.0
