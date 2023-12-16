@@ -3,8 +3,6 @@ extends Control
 @onready var multiplayer_buttons = $Lobby/Buttons
 @onready var host = $Lobby/Buttons/Host
 @onready var join = $Lobby/Buttons/Join
-@onready var Name = $Lobby/Name
-@onready var NameLine = $Lobby/Name/LineEdit
 @onready var id = $Id
 
 
@@ -27,10 +25,10 @@ func peer_disconnected(id):
     GameManager.Players.erase(id)
 
 func connected_to_server():
-    print("(%s) %s connected to server!" % [multiplayer.get_unique_id(), NameLine.text])
+    print("(%s) Connected to server!" % multiplayer.get_unique_id())
     id.text = "Id: %s" % multiplayer.get_unique_id()
     id.name = str(multiplayer.get_unique_id())
-    SendPlayerInformation.rpc_id(1, NameLine.text, multiplayer.get_unique_id())
+    SendPlayerInformation.rpc_id(1, multiplayer.get_unique_id())
 
 func connection_failed():
     print("Couldn't connect to server")
@@ -38,7 +36,6 @@ func connection_failed():
 func _on_host_button_down():
     setup_enet(true)
     multiplayer_buttons.hide()
-    Name.hide()
     LoadGameScene()
     print("Waiting for players")
     id.text = "Id: %s" % multiplayer.get_unique_id()
@@ -47,7 +44,6 @@ func _on_host_button_down():
 func _on_join_button_down():
     setup_enet(false)
     multiplayer_buttons.hide()
-    Name.hide()
     LoadGameScene()
 
 func setup_enet(is_server: bool):
@@ -70,38 +66,36 @@ func LoadGameScene():
     get_tree().root.add_child(scene)
 
 @rpc("any_peer", "call_remote", "reliable")
-func SendPlayerInformation(player_name: String, id: int):
+func SendPlayerInformation(id: int):
     if not multiplayer.is_server():
         return
     var player_equips: Array = _get_random_equips()
     var spawn = Vector3(3, 0, 52)
-    LoadPlayer(player_name, id, player_equips, spawn)
-    LoadPlayer.rpc_id(id, player_name, id, player_equips, spawn)
-    LoadPlayer.rpc(player_name, id, player_equips, spawn)
+    LoadPlayer(id, player_equips, spawn)
+    LoadPlayer.rpc_id(id, id, player_equips, spawn)
+    LoadPlayer.rpc(id, player_equips, spawn)
     for p in GameManager.Players:
         var player = GameManager.Players[p]
         if player["id"] != id:
             print("Sending %s to %s" % [player["id"], id])
             var equips = player["obj"].get_node("Visuals").get_equips()
             # Send existing player to new player
-            LoadPlayer.rpc_id(id, player["name"], player["id"], equips, player["obj"].global_position)
+            LoadPlayer.rpc_id(id, player["id"], equips, player["obj"].global_position)
 
 @rpc("authority", "call_remote", "reliable")
-func LoadPlayer(player_name: String, id: int, equips: Array, loc: Vector3):
+func LoadPlayer(id: int, equips: Array, loc: Vector3):
     if !GameManager.Players.has(id):
         var currentPlayer = preload("res://scenes/player.tscn").instantiate()
         currentPlayer.name = str(id)
         get_node("Players").add_child(currentPlayer)
         currentPlayer.global_position = loc
-        print("(%s) Adding player %s %s %s" % [
+        print("(%s) Adding player %s %s" % [
             multiplayer.get_unique_id(),
-            player_name,
             id,
             currentPlayer.global_position])
         var visuals = currentPlayer.get_node("Visuals")
         visuals.set_equips(equips)
         GameManager.Players[id] = {
-            "name": player_name,
             "id": id,
             "obj": currentPlayer
         }

@@ -40,26 +40,6 @@ offset_right = 384.0
 offset_bottom = 256.0
 text = "Join"
 
-[node name="Name" type="Control" parent="Lobby"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="LineEdit" type="LineEdit" parent="Lobby/Name"]
-layout_mode = 0
-offset_left = 136.0
-offset_top = 320.0
-offset_right = 384.0
-offset_bottom = 351.0
-
-[node name="Label" type="Label" parent="Lobby/Name"]
-layout_mode = 0
-offset_left = 72.0
-offset_top = 320.0
-offset_right = 123.0
-offset_bottom = 343.0
-text = "Name:"
-
 [node name="Players" type="Node" parent="."]
 
 [node name="Id" type="Label" parent="."]

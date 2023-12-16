@@ -6,9 +6,6 @@ extends CharacterBody3D
 
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.5
-const DIRECTION_INTERPOLATE_SPEED = 1
-const MOTION_INTERPOLATE_SPEED = 10
-const ROTATION_INTERPOLATE_SPEED = 10
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -20,8 +17,6 @@ enum ANIMATIONS { IDLE, JUMP, WALK }
 func _ready():
     $ServerSync.set_multiplayer_authority(1)
     player_input.set_multiplayer_authority(str(name).to_int())
-    if not multiplayer.is_server():
-        set_process(false)
 
 func _physics_process(delta):
     if not multiplayer.is_server():
